@@ -1,0 +1,200 @@
+<!--CLIENT SIDE FUNCTIONALITY TEST COMPLETED WORKING SMOOTH-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,100&display=swap" rel="stylesheet">
+    <title>Chatting app</title>
+    <style>
+        body{
+            background-image:linear-gradient(rgb(255,255,255),rgb(255,255,0));
+            background-repeat: no-repeat;
+            height:auto;
+        }
+        img{
+            width:200px;
+        }
+        .a{
+            margin-left:650px;
+        }
+        .b{
+            height:700px;
+            background-image:linear-gradient(rgb(255, 68, 0),rgb(255,255,255));
+            width:800px;
+            margin-left:auto;
+            margin-right:auto;
+            margin-top:25px;
+            border:3px solid black;
+            border-radius:30px;
+            overflow-y:auto;
+        }
+        input{
+            width:720px;
+            height:25px;
+            border:2px solid black;
+            border-radius:10px;
+        }
+        .c{
+            margin-top:10px;
+            margin-left:370px;
+        
+        }
+        .btn{
+            height:29px;
+            width:50px;
+            border:1px solid black;
+            border-radius: 5px;
+        }
+        .image{
+            width:25px;
+            height:25px;
+            border:2px solid black;
+            border-radius:25px;
+            background-color: white;
+            margin-left:320px;
+            margin-top:20px;
+        }
+        .b1{
+            margin-left:30px;
+            margin-top:20px;
+            padding:10px;
+            border:2px solid black;
+            border-radius:20px;
+            width:120px;
+            background-color: white;
+        }
+        .b2{
+            margin-left:635px;
+            margin-top:20px;
+            padding:10px;
+            border:2px solid black;
+            border-radius:20px;
+            width:120px;
+            background-color: white;
+        }
+        .b3{
+            margin-left:20px;
+            margin-top:20px;
+            padding:10px;
+            border:2px solid black;
+            border-radius:20px;
+            width:100px;
+            background-color: white;
+            display:inline-block;
+        }
+        p{
+            font-size: 30px;
+            margin-left:150px;
+            color:white;
+            font-family: 'Roboto Mono', monospace;
+        }
+        footer{
+            text-align: center;
+            height:50px;
+            color:white;
+            background-color:black;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="a">
+        <img src="https://static.whatsapp.net/rsrc.php/v3/y7/r/DSxOAUB0raA.png">
+    </div>
+    <div class="b">
+        <p>WELCOME TO THE CHATTING APP</p>
+    </div>
+    <div class="c">
+        <form action="#" id="send-container" >
+            <input type="text" name="send" class="name">
+            <button type='submit' class="btn">SEND</button>
+        </form>
+    </div>
+    <footer>
+        &copy Copy Right;
+    </footer>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        const form = document.getElementById('send-container');
+        const input=document.querySelector('.name');
+        const messageInput = document.getElementsByClassName('c');
+        const messageContainer = document.querySelector('.b');
+        const audio= new Audio('ding-idea-40142.mp3');
+        const append=(message,link)=>{
+            const image = document.createElement('img');
+            image.src =link;
+            image.classList.add('image')
+            const messageElement=document.createElement('div');
+            messageElement.innerText=`${message}
+                                      Joined the chat`;
+            messageElement.classList.add('b3');
+            messageContainer.append(image)
+            messageContainer.append(messageElement);
+            audio.play();
+        };
+
+
+        const appendz=(message,link)=>{
+            const image = document.createElement('img');
+            image.src =link;
+            image.classList.add('image')
+            const messageElement=document.createElement('div');
+            messageElement.innerText=`${message}
+                                      Left the chat`;
+            messageElement.classList.add('b3');
+            messageContainer.append(image)
+            messageContainer.append(messageElement);
+        };
+
+        const appendx=(message,position)=>{
+            const messageElement=document.createElement('div');
+            messageElement.innerText=message;
+            messageElement.classList.add('b2');
+            messageElement.classList.add(position);
+            messageContainer.append(messageElement);
+        };
+
+        const appendy=(message,position)=>{
+            const messageElement=document.createElement('div');
+            messageElement.innerText=message;
+            messageElement.classList.add('b1');
+            messageElement.classList.add(position);
+            messageContainer.append(messageElement);
+        };
+
+
+
+
+        form.addEventListener('submit',(e)=>{
+            console.log("executed code");
+            e.preventDefault();
+            var message=input.value;
+            console.log(message);
+            appendx(`You:
+                     ${message}`,'right')
+            socket.emit('send',message)
+            input.value=''
+        })
+        socket.on('user-joined',(name,link)=>{
+            console.log('working');
+            append(name,link);
+        });
+        socket.on('left',(name,link)=>{
+            appendz(name,link)
+        })
+
+
+        socket.on('receive',data=>{
+            appendy(`${data.name}:
+                     ${data.message}`,'left')
+        });
+    </script>
+</body>
+</html>

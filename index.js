@@ -29,8 +29,8 @@ let array=[];
 passport.use(
     new GoogleStrategy(
       {
-        clientID: '833219992504-mdsq1pb079i5f4kggil1gcqdcq8nifi6.apps.googleusercontent.com',
-        clientSecret: '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',
+        clientID: 'Enter the client Id which you create',
+        clientSecret: 'EnterR the Secrete which you create',
         callbackURL: '/auth/google/callback',
       },
       (accessToken, refreshToken, profile, done) => {

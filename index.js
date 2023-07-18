@@ -30,7 +30,7 @@ passport.use(
     new GoogleStrategy(
       {
         clientID: 'Enter the client Id which you create',
-        clientSecret: 'EnterR the Secrete which you create',
+        clientSecret: 'Enter the secrete which you create',
         callbackURL: '/auth/google/callback',
       },
       (accessToken, refreshToken, profile, done) => {
